@@ -4,41 +4,52 @@
   <title>Template Folders</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Latest compiled and minified CSS -->
+  <!-- Latest compiled and minified Bootstrap CSS, fontawesome and jQuery -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+
   <!-- Angular -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
   <script src="https://code.angularjs.org/1.6.1/angular-route.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.4.0/ui-bootstrap.min.js"></script>
   <script src="core.js"></script>
+
+  <style>
+    .folder-name:hover, .fa:hover {
+      cursor: pointer
+    }
+
+    .fa-trash::before, .fa-times::before {
+      margin: 10px;
+    }
+  </style>
 </head>
-<body ng-controller="appController">
+<body ng-controller="appFolderController">
   <div class="container">
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <h1> New Folder</h1>
-        <form ng-submit="newCareplan()" class="form">
-          <input type="text" name="symptom" placeholder="symptom" ng-model="symptom">
-          <input type="text" name="diagnosis" placeholder="diagnosis" ng-model="diagnosis">
-          <button>Submit</button>
-        </form>
-        <br><br>
-        <hr>
-        <h1> Update careplan Form</h1>
-        <form action="http://localhost:8000/api/careplan/edit" method="POST" id="editForm" class="form">
-          <input type="text" name="id" placeholder="id">
-          <input type="text" name="symptom" placeholder="symptom">
-          <input type="text" name="diagnosis" placeholder="diagnosis">
-          <button>Submit</button>
-        </form>
-        <br><br>
+        <h1>Template Folder</h1>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="newFolder()"><i class="fa fa-plus"></i></button>
+          </span>
+          <input type="text" name="foldername" placeholder="Add new folder" ng-model="folderName" class="form-control">
+        </div>
         <hr>
         <ul class="list-group">
-        <li ng-repeat="f in forms">
-          {{ f. }}<br>
-          {{ f.diagnosis }}<br><hr>
-        </li>
+          <div ng-repeat="f in folders">
+            <li class="list-group-item" ng-hide="editMode">
+              <span class="folder-name">{{ f.folderName }}</span>
+              <i class="fa fa-trash pull-right" ng-click="deleteFolder(f)"></i>
+              <i class="fa fa-pencil pull-right" ng-click="editMode = true"></i>
+            </li>
+            <li class="list-group-item" ng-show="editMode">
+              <input type="text" value="{{ f.folderName }}" ng-model="f.folderName" ng-change="f.changed = true">
+              <i class="fa fa-times pull-right" ng-click="editMode = false"></i>
+              <i class="fa fa-check pull-right" ng-click="editFolder(f); editMode = false"></i>
+            </li>
+        </div>
         </ul>
       </div>
     </div>

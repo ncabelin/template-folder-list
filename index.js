@@ -33,8 +33,7 @@ app.post('/api/folders/new', function(req, res) {
     templates: req.body.templates || []
   }, function(err, template) {
     if (err) res.status(400).send(err);
-    res.json({ message: 'created new template',
-    template: template});
+    res.json(template);
   });
 });
 
@@ -50,21 +49,24 @@ app.get('/api/folders/get/:id', function(req, res) {
 app.post('/api/folders/edit', function(req, res) {
   Templates.findById(req.body.id, function(err, folder) {
       if (err) res.status(400).send(err);
-      folder.folderName = req.body.foldername;
-
-      // save
-      folder.save(function(err) {
-        if (err) res.status(400).send(err);
-        res.json({ message: 'saved careplan'});
-      });
+      if (folder.folderName != req.body.foldername) {
+        folder.folderName = req.body.foldername;
+        // save
+        folder.save(function(err) {
+          if (err) res.status(400).send(err);
+          res.json({ message: 'saved folder'});
+        });
+      } else {
+        res.json({message: 'no changes seen'});
+      }
   });
 });
 
 // delete folder by i.d.
-app.post('/api/folders/delete/:id', function(req, res) {
-  Templates.remove({ _id: req.params.id }, function(err, template) {
+app.post('/api/folders/delete', function(req, res) {
+  Templates.remove({ _id: req.body.id }, function(err, folder) {
     if (err) res.status(400).send(err);
-    res.json({ message: 'deleted careplan' });
+    res.json({ delete_id: req.body.id });
   });
 });
 
@@ -89,11 +91,11 @@ app.post('/api/template/update', function(req, res) {
 });
 
 // delete a template by folder i.d.
-app.post('/api/template/delete', function(req, res) {
-  Templates.update({ _id: req.body.id },
-    { $pull: { templates: [ req.body.template ]}});
-  });
-});
+// app.post('/api/template/delete', function(req, res) {
+//   Templates.update({ _id: req.body.id },
+//     { $pull: { templates: [ req.body.template ]}});
+//   });
+// });
 //
 
 app.listen(process.env.PORT || 8000, function() {

@@ -5,13 +5,14 @@ Also uses MongoDB with Mongoose for the database.
 
 ## Project Structure
 
-index.js - node app
-README.md - this readme markdown
-package.json - node configuration
+```
+index.js # node app
+README.md # this readme markdown
+package.json # node configuration
 /public
-------- core.js - angular app
-------- index.html - angular template
-
+------- core.js # angular app
+------- index.html # angular template
+```
 ## Contributors
 
 Neptune Cabelin, Art Cabelin

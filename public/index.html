@@ -1,0 +1,47 @@
+<!doctype html>
+<html ng-app="appFolders">
+<head>
+  <title>Template Folders</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+  <!-- Angular -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="https://code.angularjs.org/1.6.1/angular-route.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.4.0/ui-bootstrap.min.js"></script>
+  <script src="core.js"></script>
+</head>
+<body ng-controller="appController">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <h1> New Folder</h1>
+        <form ng-submit="newCareplan()" class="form">
+          <input type="text" name="symptom" placeholder="symptom" ng-model="symptom">
+          <input type="text" name="diagnosis" placeholder="diagnosis" ng-model="diagnosis">
+          <button>Submit</button>
+        </form>
+        <br><br>
+        <hr>
+        <h1> Update careplan Form</h1>
+        <form action="http://localhost:8000/api/careplan/edit" method="POST" id="editForm" class="form">
+          <input type="text" name="id" placeholder="id">
+          <input type="text" name="symptom" placeholder="symptom">
+          <input type="text" name="diagnosis" placeholder="diagnosis">
+          <button>Submit</button>
+        </form>
+        <br><br>
+        <hr>
+        <ul class="list-group">
+        <li ng-repeat="f in forms">
+          {{ f. }}<br>
+          {{ f.diagnosis }}<br><hr>
+        </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

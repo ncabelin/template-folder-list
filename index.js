@@ -9,10 +9,18 @@ app.use(bodyParser.json());
 
 mongoose.connect('mongodb://marco:Marcopupu2014@ds021663.mlab.com:21663/supernotes');
 
+var subTemplateSchema = new mongoose.Schema({
+  name: String
+});
+
+var SubTemplates = mongoose.model('SubTemplate', subTemplateSchema);
+
 var Templates = mongoose.model('Templates', {
   folderName: String,
-  templates: [String]
+  templates: [subTemplateSchema]
 });
+
+console.log(SubTemplates);
 
 app.get('/', function(req, res) {
   res.sendFile('angular.html');
@@ -74,29 +82,32 @@ app.post('/api/folders/delete', function(req, res) {
 app.post('/api/template/add', function(req, res) {
   Templates.findById(req.body.id, function(err, folder) {
     if (err) res.status(400).send(err);
-    folder.templates.push(req.body.name);
+    folder.templates.push({name:req.body.templateName});
+    folder.save(function(err) {
+      if (err) res.status(400).send(err);
+      res.json(folder.templates);
+    });
+  });
+});
+
+app.get('/api/template/get', function(req, res) {
+  SubTemplates.find(function(err, templates) {
+    if (err) res.status(400).send(err);
+    res.json(templates);
   });
 });
 
 // update a template
 app.post('/api/template/update', function(req, res) {
-  Templates.update(
-    { '_id': req.body.id, templates: req.body.oldtemplate },
-    { '$set' : { 'templates.$' : req.body.newtemplate }},
-    { multi: false },
-    function(err, num) {
+  Templates.findById(req.body.id, function(err, folder) {
+    if (err) res.status(400).send(err);
+    folder.templates = req.body.template;
+    folder.save(function(err) {
       if (err) res.status(400).send(err);
-      res.json('updated ' + num);
+      res.json(folder.templates);
+    });
   });
 });
-
-// delete a template by folder i.d.
-// app.post('/api/template/delete', function(req, res) {
-//   Templates.update({ _id: req.body.id },
-//     { $pull: { templates: [ req.body.template ]}});
-//   });
-// });
-//
 
 app.listen(process.env.PORT || 8000, function() {
   console.log('Server started...');

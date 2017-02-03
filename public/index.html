@@ -16,8 +16,17 @@
   <script src="core.js"></script>
 
   <style>
-    .folder-name:hover, .fa:hover {
-      cursor: pointer
+    .form-temp {
+      margin-top: 10px;
+    }
+
+    .template {
+
+    }
+
+    .folder-name:hover, .fa:hover, .template:hover {
+      cursor: pointer;
+      color: gray;
     }
 
     .fa-trash::before, .fa-times::before {
@@ -30,19 +39,48 @@
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
         <h1>Template Folder</h1>
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="newFolder()"><i class="fa fa-plus"></i></button>
-          </span>
-          <input type="text" name="foldername" placeholder="Add new folder" ng-model="folderName" class="form-control">
-        </div>
+        <form ng-submit="newFolder()">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit"><i class="fa fa-plus"></i></button>
+            </span>
+            <input type="text" name="foldername" placeholder="Add Folder" ng-model="folderName" class="form-control">
+          </div>
+        </form>
         <hr>
+
+        <!-- List folders -->
         <ul class="list-group">
           <div ng-repeat="f in folders">
-            <li class="list-group-item" ng-hide="editMode">
-              <span class="folder-name">{{ f.folderName }}</span>
+            <li class="list-group-item" ng-hide="editMode" ng-init="showAddTemplate = false">
+              <span class="folder-name" ng-click="showAddTemplate = !showAddTemplate">{{ f.folderName }}</span>
               <i class="fa fa-trash pull-right" ng-click="deleteFolder(f)"></i>
               <i class="fa fa-pencil pull-right" ng-click="editMode = true"></i>
+              <br>
+              <form ng-submit="addTemplate(f, newTemplate); newTemplate = ''" ng-show="showAddTemplate" class="form form-temp">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-plus"></i></button>
+                  </span>
+                  <input type="text" placeholder="Add Template" ng-model="newTemplate" class="form-control">
+                </div>
+              </form>
+              <!-- List templates -->
+              <ul ng-show="showAddTemplate" class="list-group">
+                <hr>
+                <div ng-repeat="t in f.templates">
+                  <li class="list-group-item" ng-hide="editTemplateMode">
+                    <span class="template">{{ t.name }}</span>
+                    <i class="fa fa-trash pull-right" ng-click="deleteTemplate(f, t)"></i>
+                    <i class="fa fa-pencil pull-right" ng-click="editTemplateMode = true"></i>
+                  </li>
+                  <li class="list-group-item" ng-show="editTemplateMode">
+                    <input type="text" value="{{ t.name }}" ng-model="t.name">
+                    <i class="fa fa-times pull-right" ng-click="editTemplateMode = false"></i>
+                    <i class="fa fa-check pull-right" ng-click="updateTemplate(f, f.templates); editTemplateMode = false"></i>
+                  </li>
+                </div>
+              </ul>
             </li>
             <li class="list-group-item" ng-show="editMode">
               <input type="text" value="{{ f.folderName }}" ng-model="f.folderName" ng-change="f.changed = true">

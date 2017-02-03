@@ -57,11 +57,54 @@ angular.module('appFolders',[])
           }
         }
       }, function(err) {
-        alert(err);
+        console.log(err);
       });
     };
 
-  $scope.newTemplate = function() {
-    // add new template in array
+  $scope.addTemplate = function(folder, newTemplate) {
+    // add new template in array if $scope.newTemplate is not empty
+    console.log(newTemplate);
+    if (newTemplate) {
+      $http.post('http://localhost:8000/api/template/add', JSON.stringify(
+        {
+          id: folder._id,
+          templateName: newTemplate
+        }
+      )).then(function(result) {
+        folder.templates = result.data;
+      }, function(err) {
+        console.log(err);
+      });
+    }
+  };
+
+  $scope.updateTemplate = function(folder, templates) {
+    $http.post('http://localhost:8000/api/template/update', JSON.stringify(
+        {
+          id: folder._id,
+          template: templates
+        }
+      )).then(function(result) {
+        console.log('updated templates');
+        console.log(result.data);
+      }, function(err) {
+        console.log(err);
+      });
+  };
+
+  $scope.deleteTemplate = function(folder, template) {
+    console.log(folder);
+    $http.post('http://localhost:8000/api/template/delete', JSON.stringify(
+      { id: folder._id }
+    )).then(function(result) {
+      console.log(result.data);
+      for (var i = 0, j = $scope.folders.length; i < j; i++) {
+        if ($scope.folders[i]._id == folder._id) {
+          $scope.folders.splice(i, 1);
+        }
+      }
+    }, function(err) {
+      console.log(err);
+    });
   };
 });

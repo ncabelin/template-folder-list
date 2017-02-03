@@ -53,7 +53,8 @@
         <ul class="list-group">
           <div ng-repeat="f in folders">
             <li class="list-group-item" ng-hide="editMode" ng-init="showAddTemplate = false">
-              <span class="folder-name" ng-click="showAddTemplate = !showAddTemplate">{{ f.folderName }}</span>
+              <span class="folder-name" ng-click="showAddTemplate = !showAddTemplate">{{ f.folderName }}&nbsp; <i class="fa fa-caret-up" aria-hidden="true" ng-show="showAddTemplate"></i>
+              <i class="fa fa-caret-down" aria-hidden="true" ng-hide="showAddTemplate"></i></span>
               <i class="fa fa-trash pull-right" ng-click="deleteFolder(f)"></i>
               <i class="fa fa-pencil pull-right" ng-click="editMode = true"></i>
               <br>
@@ -70,7 +71,7 @@
                 <hr>
                 <div ng-repeat="t in f.templates">
                   <li class="list-group-item" ng-hide="editTemplateMode">
-                    <span class="template">{{ t.name }}</span>
+                    <span class="template">{{ t.name }} </span>
                     <i class="fa fa-trash pull-right" ng-click="deleteTemplate(f, t); updateTemplate(f, f.templates)"></i>
                     <i class="fa fa-pencil pull-right" ng-click="editTemplateMode = true"></i>
                   </li>

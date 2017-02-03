@@ -3,7 +3,7 @@ angular.module('appFolders',[])
     $scope.editMode = false;
 
     $scope.getFolders = function() {
-      $http.get('http://localhost:8000/api/folders').then(function(result) {
+      $http.get('/api/folders').then(function(result) {
         // get all folders
         console.log(result.data);
         $scope.folders = result.data;
@@ -16,7 +16,7 @@ angular.module('appFolders',[])
     $scope.getFolders();
 
     $scope.newFolder = function() {
-      $http.post('http://localhost:8000/api/folders/new', JSON.stringify(
+      $http.post('/api/folders/new', JSON.stringify(
         {
           foldername: $scope.folderName
         }
@@ -34,7 +34,7 @@ angular.module('appFolders',[])
     };
 
     $scope.editFolder = function(folder) {
-      $http.post('http://localhost:8000/api/folders/edit', JSON.stringify(
+      $http.post('/api/folders/edit', JSON.stringify(
         {
           id: folder._id,
           foldername: folder.folderName
@@ -46,7 +46,7 @@ angular.module('appFolders',[])
     };
 
     $scope.deleteFolder = function(folder) {
-      $http.post('http://localhost:8000/api/folders/delete', JSON.stringify(
+      $http.post('/api/folders/delete', JSON.stringify(
         { id: folder._id }
       )).then(function(result) {
         console.log(result.data);
@@ -64,7 +64,7 @@ angular.module('appFolders',[])
     // add new template in array if $scope.newTemplate is not empty
     console.log(newTemplate);
     if (newTemplate) {
-      $http.post('http://localhost:8000/api/template/add', JSON.stringify(
+      $http.post('/api/template/add', JSON.stringify(
         {
           id: folder._id,
           templateName: newTemplate
@@ -78,7 +78,7 @@ angular.module('appFolders',[])
   };
 
   $scope.updateTemplate = function(folder, templates) {
-    $http.post('http://localhost:8000/api/template/update', JSON.stringify(
+    $http.post('/api/template/update', JSON.stringify(
         {
           id: folder._id,
           template: templates

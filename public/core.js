@@ -46,7 +46,6 @@ angular.module('appFolders',[])
     };
 
     $scope.deleteFolder = function(folder) {
-      console.log(folder);
       $http.post('http://localhost:8000/api/folders/delete', JSON.stringify(
         { id: folder._id }
       )).then(function(result) {
@@ -93,18 +92,7 @@ angular.module('appFolders',[])
   };
 
   $scope.deleteTemplate = function(folder, template) {
-    console.log(folder);
-    $http.post('http://localhost:8000/api/template/delete', JSON.stringify(
-      { id: folder._id }
-    )).then(function(result) {
-      console.log(result.data);
-      for (var i = 0, j = $scope.folders.length; i < j; i++) {
-        if ($scope.folders[i]._id == folder._id) {
-          $scope.folders.splice(i, 1);
-        }
-      }
-    }, function(err) {
-      console.log(err);
-    });
+    var index = folder.templates.indexOf(template);
+    folder.templates.splice(index, 1);
   };
 });
